@@ -12,7 +12,7 @@ public class SwaggerConfig {
 	public OpenAPI springShopOpenAPI() {
 		return new OpenAPI()
 				.info(new Info()
-				.title("Atividade API Comercio")
-				.description("API comercial com relação entre fornecedores, produtos e categorias. Atividade para a Residência do Serratec."));
+				.title("API Serratec Comercio")
+				.description("Uma API de comercio com relação entre fornecedores, produtos e categorias."));
 	}
 }
