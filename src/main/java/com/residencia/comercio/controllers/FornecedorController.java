@@ -23,13 +23,18 @@ import com.residencia.comercio.entities.Fornecedor;
 import com.residencia.comercio.exceptions.NoSuchElementFoundException;
 import com.residencia.comercio.services.FornecedorService;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 @RestController
 @RequestMapping("/fornecedor")
+@Tag(name = "Fornecedor", description = "Endpoints")
 public class FornecedorController {
 	@Autowired
 	FornecedorService fornecedorService;
 
 	@GetMapping
+	@Operation(summary = "Lista todos os fornecedores")
 	public ResponseEntity<List<Fornecedor>> findAllFornecedor() {
 		List<Fornecedor> fornecedorList = fornecedorService.findAllFornecedor();
 		
@@ -41,6 +46,7 @@ public class FornecedorController {
 	}
 
 	@GetMapping("/cnpj/{cnpj}")
+	@Operation(summary = "Consulta os dados por CNPJ")
 	public ResponseEntity<CadastroEmpresaReceitaDTO> consultarDadosPorCnpj(String cnpj) {
 		CadastroEmpresaReceitaDTO cadEmpresaDTO = fornecedorService.consultarDadosPorCnpj(cnpj);
 		if (null == cadEmpresaDTO)
@@ -50,6 +56,7 @@ public class FornecedorController {
 	}
 	
 	@GetMapping("/cep/{cep}")
+	@Operation(summary = "Consulta os dados por CEP")
 	public ResponseEntity<CadastroEnderecoDTO> consultarEnderecoPorCep(String cep) {
 		CadastroEnderecoDTO cadEnderecoDTO = fornecedorService.consultarEnderecoPorCep(cep);
 		if (null == cadEnderecoDTO)
@@ -59,12 +66,14 @@ public class FornecedorController {
 	}
 
 	@GetMapping("/dto/{id}")
+	@Operation(summary = "Lista um fornecedor por id via DTO")
 	public ResponseEntity<FornecedorDTO> findFornecedorDTOById(@PathVariable Integer id) {
 		FornecedorDTO fornecedorDTO = fornecedorService.findFornecedorDTOById(id);
 		return new ResponseEntity<>(fornecedorDTO, HttpStatus.OK);
 	}
 
 	@GetMapping("/{id}")
+	@Operation(summary = "Lista um fornecedor por id")
 	public ResponseEntity<Fornecedor> findFornecedorById(@PathVariable Integer id) {
 		Fornecedor fornecedor = fornecedorService.findFornecedorById(id);
 		if (null == fornecedor)
@@ -74,12 +83,14 @@ public class FornecedorController {
 	}
 
 	@PostMapping
+	@Operation(summary = "Salva um novo fornecedor")
 	public ResponseEntity<Fornecedor> saveFornecedor(@Valid @RequestBody Fornecedor fornecedor) {
 		Fornecedor novoFornecedor = fornecedorService.saveFornecedor(fornecedor);
 		return new ResponseEntity<>(novoFornecedor, HttpStatus.CREATED);
 	}
 
 	@PostMapping("/dto")
+	@Operation(summary = "Salva um novo fornecedor via DTO")
 	public ResponseEntity<FornecedorDTO> saveFornecedorDTO(@RequestBody FornecedorDTO fornecedorDTO) {
 		FornecedorDTO novoFornecedorDTO = fornecedorService.saveFornecedorDTO(fornecedorDTO);
 		return new ResponseEntity<>(novoFornecedorDTO, HttpStatus.CREATED);
@@ -87,12 +98,14 @@ public class FornecedorController {
 
 
 	@PutMapping
+	@Operation(summary = "Atualiza um fornecedor")
 	public ResponseEntity<Fornecedor> updateFornecedor(@RequestBody Fornecedor fornecedor) {
 		Fornecedor novoFornecedor = fornecedorService.updateFornecedor(fornecedor);
 		return new ResponseEntity<>(novoFornecedor, HttpStatus.OK);
 	}
 	
 	@DeleteMapping
+	@Operation(summary = "Deleta um fornecedor")
 	public ResponseEntity<String> deleteFornecedor(@RequestBody Fornecedor fornecedor) {
 		if (fornecedorService.findFornecedorById(fornecedor.getIdFornecedor()) == null) {
 			return new ResponseEntity<>("Não foi possível excluir. O Fornecedor de id = " + fornecedor.getIdFornecedor()
@@ -106,6 +119,7 @@ public class FornecedorController {
 	}
 
 	@DeleteMapping("/{id}")
+	@Operation(summary = "Deleta um fornecedor por id")
 	public ResponseEntity<String> deleteFornecedorById(@PathVariable Integer id) {
 		if (fornecedorService.findFornecedorById(id) == null) {
 			return new ResponseEntity<>("Não foi possível excluir. O Fornecedor de id = " + id + " não foi encontrado.",

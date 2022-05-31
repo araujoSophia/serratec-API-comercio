@@ -24,14 +24,19 @@ import com.residencia.comercio.entities.Produto;
 import com.residencia.comercio.exceptions.NoSuchElementFoundException;
 import com.residencia.comercio.services.ProdutoService;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 @RestController
 @RequestMapping("/produto")
 @Validated
+@Tag(name = "Produto", description = "Endpoints")
 public class ProdutoController {
 	@Autowired
 	ProdutoService produtoService;
 
 	@GetMapping
+	@Operation(summary = "Lista todos os produtos")
 	public ResponseEntity<List<Produto>> findAllProduto() {
 		List<Produto> produtoList = produtoService.findAllProduto();
 
@@ -43,6 +48,7 @@ public class ProdutoController {
 	}
 
 	@GetMapping("/dto/{id}")
+	@Operation(summary = "Lista um produto por id via DTO")
 	public ResponseEntity<ProdutoDTO> findProdutoDTOById(@PathVariable Integer id) {
 		ProdutoDTO produtoDTO = produtoService.findProdutoDTOById(id);
 
@@ -54,6 +60,7 @@ public class ProdutoController {
 	}
 
 	@GetMapping("/{id}")
+	@Operation(summary = "Lista um produto por id")
 	public ResponseEntity<Produto> findProdutoById(@RequestParam Integer id) {
 		Produto produto = produtoService.findProdutoById(id);
 		if (null == produto)
@@ -75,24 +82,28 @@ public class ProdutoController {
 	}
 
 	@PostMapping
+	@Operation(summary = "Salva um novo produto")
 	public ResponseEntity<Produto> saveProduto(@Valid @RequestBody Produto produto) {
 		Produto novoProduto = produtoService.saveProduto(produto);
 		return new ResponseEntity<>(novoProduto, HttpStatus.CREATED);
 	}
 
 	@PostMapping("/dto")
+	@Operation(summary = "Salva um novo produto via DTO")
 	public ResponseEntity<ProdutoDTO> saveProdutoDTO(@RequestBody ProdutoDTO produtoDTO) {
 		ProdutoDTO novoProdutoDTO = produtoService.saveProdutoDTO(produtoDTO);
 		return new ResponseEntity<>(novoProdutoDTO, HttpStatus.CREATED);
 	}
 
 	@PutMapping
+	@Operation(summary = "Atualiza um produto")
 	public ResponseEntity<Produto> updateProduto(@RequestBody Produto produto) {
 		Produto novoProduto = produtoService.updateProduto(produto);
 		return new ResponseEntity<>(novoProduto, HttpStatus.OK);
 	}
 
 	@DeleteMapping
+	@Operation(summary = "Deleta um produto")
 	public ResponseEntity<String> deletePoduto(Produto produto) {
 		if (produtoService.findProdutoById(produto.getIdProduto()) == null) {
 			return new ResponseEntity<>(
@@ -106,6 +117,7 @@ public class ProdutoController {
 	}
 
 	@DeleteMapping("/{id}")
+	@Operation(summary = "Deleta um produto por id")
 	public ResponseEntity<String> deleteProdutoById(@PathVariable Integer id) {
 		if (produtoService.findProdutoById(id) == null) {
 			return new ResponseEntity<>("Não foi possível excluir. O Produto de id = " + id + " não foi encontrado.",
